@@ -50,7 +50,7 @@ describe('Log in to FiFo as admin', function() {
 describe('Delete any previous test Dataset(s)', function() {
 	it('Might delete a Dataset', function(done) {
 		LTH.deleteSpecificMemberByDataset('localhost:3000/api/listDatasets', 'localhost:3000/api/getDataset', 'localhost:3000/api/deleteDataset', LTC.saved_dataset_uuid, 'Dataset')
-			.then(done);
+			.then(function() { done(); });
 	});
 });
 

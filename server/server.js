@@ -34,6 +34,18 @@ var express = require('express'),
     // Non-API Middleware
     msgpack = require('msgpack'),
 
+    // Redis Database
+    redis = require('redis'),
+    redisPub = redis.createClient(),
+    redisSub = redis.createClient(null, null, {
+        detect_buffers: true
+    }),
+    redisClient = redis.createClient(),
+    RedisStore = require('connect-redis')(express),
+    sessionStore = new RedisStore({
+        client: redisClient
+    }),
+
     // Express
     port = (process.env.PORT || Config.listenPort),
     server = module.exports = express(),
@@ -59,8 +71,11 @@ fifo.setActivityLog(ActivityLog);
 // SERVER CONFIGURATION
 // ====================
 
-server.configure(function() {
+var app = express();
+var env = app.settings.env;
 
+//if ('production' == env) {
+//} else {
     // add timestamps in front of log messages
     // require('console-stamp')(console, '[HH:mm:ss.l]');
     // express.logger.format('mydate', function() {
@@ -80,9 +95,14 @@ server.configure(function() {
     //     format: workerIdPrefix + ':remote-addr - :status [:mydate] :method :url - :response-time ms'
     // }));
 
-    server.use(server.router);
+    server.use(express.session({
+        secret: Config.session.secret,
+        key: 'express.sid',
+        store: sessionStore
+    }));
 
-});
+    server.use(server.router);
+//}
 
 // API
 // ===

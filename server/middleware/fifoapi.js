@@ -579,20 +579,20 @@ module.exports.loginAuto = function(req, res, next, auto) {
                         _tokenCount = 0;
                         // console.log('saved loggedin val!', req.session._loggedInFifo);
                         // console.log(req.ip, req.header('x-forwarded-for'), req.connection.remoteAddress);
-                        var ipAddr = req.headers["x-forwarded-for"];
-                        if (ipAddr) {
-                            var list = ipAddr.split(",");
-                            ipAddr = list[0];
-                        } else {
-                            ipAddr = req.connection.remoteAddress;
-                        }
-                        var loginDetails = "Logged in on " + moment().format('LLLL') + ' from ' + ipAddr;
-                        // console.log(obj.user.uuid, loginDetails);
-                        token.then(function(objSave) {
-                            User.metadataSet(obj.user.uuid, "lucera3", {
-                                "loggedIn": loginDetails
-                            }, objSave);
-                        });
+                        // var ipAddr = req.headers["x-forwarded-for"];
+                        // if (ipAddr) {
+                        //     var list = ipAddr.split(",");
+                        //     ipAddr = list[0];
+                        // } else {
+                        //     ipAddr = req.connection.remoteAddress;
+                        // }
+                        // var loginDetails = "Logged in on " + moment().format('LLLL') + ' from ' + ipAddr;
+                        // // console.log(obj.user.uuid, loginDetails);
+                        // token.then(function(objSave) {
+                        //     User.metadataSet(obj.user.uuid, "lucera3", {
+                        //         "loggedIn": loginDetails
+                        //     }, objSave);
+                        // });
                     }
                     _username = username;
                     _password = password;
