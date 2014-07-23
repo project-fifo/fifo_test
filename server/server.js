@@ -9,7 +9,7 @@ if (isTestEnviron) {
         }
     };
 }
-var workerIdPrefix = '[ cluster: worker ' + cluster.worker.id + ' ] ';
+var workerIdPrefix = isTestEnviron ? '[ cluster: worker ' + cluster.worker.id + ' ] ' : '[ cluster: worker 0 ] ';
 
 // DEPENDENCIES
 // ============
@@ -33,18 +33,6 @@ var express = require('express'),
 
     // Non-API Middleware
     msgpack = require('msgpack'),
-
-    // Redis Database
-    redis = require('redis'),
-    redisPub = redis.createClient(),
-    redisSub = redis.createClient(null, null, {
-        detect_buffers: true
-    }),
-    redisClient = redis.createClient(),
-    RedisStore = require('connect-redis')(express),
-    sessionStore = new RedisStore({
-        client: redisClient
-    }),
 
     // Express
     port = (process.env.PORT || Config.listenPort),
@@ -89,17 +77,13 @@ var env = app.settings.env;
     server.use(express.json());
     server.use(express.urlencoded());
 
-    server.use(express.cookieParser());
+    server.use(express.cookieParser(Config.session.secret));
 
     server.use(connect.logger({
         format: workerIdPrefix + ':remote-addr - :status [:mydate] :method :url - :response-time ms'
     }));
 
-    server.use(express.session({
-        secret: Config.session.secret,
-        key: 'express.sid',
-        store: sessionStore
-    }));
+    server.use(express.cookieSession());
 
     server.use(server.router);
 //}
@@ -147,4 +131,8 @@ setTimeout(function() {
 }, 100);
 
 // Hand the server off to the test environment if detected
-module.exports.appServer = serverWrap;
+if (!isTestEnviron) {
+    serverWrap.listen(port);
+} else {
+    module.exports.appServer = serverWrap;
+}

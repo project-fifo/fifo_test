@@ -16,7 +16,6 @@
   "main": "./server/server",
   "dependencies": {
     "connect": "~2.12.0",
-    "connect-redis": "~1.4.6",
     "console-stamp": "~0.1.1",
     "cookie": "~0.1.0",
     "ejs": "~0.8.4",
@@ -28,7 +27,6 @@
     "msgpack": "~0.2.1",
     "node-fifo": "~0.1.8",
     "q": "~0.9.7",
-    "redis": "~0.9.1",
     "request": "~2.33.0",
     "superagent": "~0.15.4",
     "winston": "~0.7.2"
