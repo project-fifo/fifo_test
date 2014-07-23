@@ -52,14 +52,14 @@ describe('Log in to FiFo as admin', function() {
 describe('Delete any previous test Network(s)', function() {
 	it('Might delete a Network', function(done) {
 		LTH.deleteSpecificMember('localhost:3000/api/listNetworks', 'localhost:3000/api/getNetwork', 'localhost:3000/api/deleteNetwork', 'Test Network', 'Network')
-			.then(done);
+			.then(function() { done(); });
 	})
 });
 
 describe('Delete any previous test IPrange(s)', function() {
 	it('Might delete an IPRange', function(done) {
 		LTH.deleteSpecificMember('localhost:3000/api/listIPranges', 'localhost:3000/api/getIPrange', 'localhost:3000/api/deleteIPrange', 'Test IPrange', 'IPrange')
-			.then(done);
+			.then(function() { done(); });
 	});
 });
 

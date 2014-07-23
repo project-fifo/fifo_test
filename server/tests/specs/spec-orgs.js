@@ -53,7 +53,7 @@ describe('Log in to FiFo as admin', function() {
 describe('Delete any previous test Organization(s)', function() {
 	it('Might delete an organization', function(done) {
 		LTH.deleteSpecificMember('localhost:3000/api/listOrganizations', 'localhost:3000/api/getOrganization', 'localhost:3000/api/deleteOrganization', ['Company', 'Company 2'], 'Organization')
-			.then(done);
+			.then(function() { done(); });
 	});
 });
 
@@ -61,7 +61,7 @@ if (LTC.trigger_test_mode) {
 	describe('Delete any previous test Group(s)', function() {
 		it('Might delete a group', function(done) {
 			LTH.deleteSpecificMember('localhost:3000/api/listGroups', 'localhost:3000/api/getGroup', 'localhost:3000/api/deleteGroup', ['Test Group', 'Test Group 2'], 'Group')
-				.then(done);
+				.then(function() { done(); });
 		});
 	});
 }

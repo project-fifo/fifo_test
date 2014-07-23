@@ -48,7 +48,7 @@ describe('Log in to FiFo as admin', function() {
 describe('Delete any previous test Dtrace(s)', function() {
 	it('Might delete a Dtrace', function(done) {
 		LTH.deleteSpecificMember('localhost:3000/api/listDtraces', 'localhost:3000/api/getDtrace', 'localhost:3000/api/deleteDtrace', 'Test Dtrace', 'Dtrace')
-			.then(done);
+			.then(function() { done(); });
 	});
 });
 

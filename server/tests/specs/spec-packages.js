@@ -48,7 +48,7 @@ describe('Log in to FiFo as admin', function() {
 describe('Delete any previous test Package(s)', function() {
 	it('Might delete a Package', function(done) {
 		LTH.deleteSpecificMember('localhost:3000/api/listPackages', 'localhost:3000/api/getPackage', 'localhost:3000/api/deletePackage', 'Test Package', 'Package')
-			.then(done);
+			.then(function() { done(); });
 	});
 });
 

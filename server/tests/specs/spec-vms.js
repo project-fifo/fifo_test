@@ -67,28 +67,28 @@ describe('Delete any previous test VM(s)', function() {
 	it('Might delete a VM', function(done) {
 		this.timeout(8000);
 		LTH.deleteSpecificMemberByAlias('localhost:3000/api/listVMs', 'localhost:3000/api/getVM', 'localhost:3000/api/deleteVM', 'Test VM', 'VM')
-			.then(done);
+			.then(function() { done(); });
 	});
 });
 
 describe('Delete any previous test Network(s)', function() {
 	it('Might delete a Network', function(done) {
 		LTH.deleteSpecificMember('localhost:3000/api/listNetworks', 'localhost:3000/api/getNetwork', 'localhost:3000/api/deleteNetwork', ['Test Network', 'Test Network 2'], 'Network')
-			.then(done);
+			.then(function() { done(); });
 	});
 });
 
 describe('Delete any previous test IPrange(s)', function() {
 	it('Might delete an IPRange', function(done) {
 		LTH.deleteSpecificMember('localhost:3000/api/listIPranges', 'localhost:3000/api/getIPrange', 'localhost:3000/api/deleteIPrange', ['Test IPrange', 'Test IPrange 2'], 'IPrange')
-			.then(done);
+			.then(function() { done(); });
 	});
 });
 
 describe('Delete any previous test Package(s)', function() {
 	it('Might delete a Package', function(done) {
 		LTH.deleteSpecificMember('localhost:3000/api/listPackages', 'localhost:3000/api/getPackage', 'localhost:3000/api/deletePackage', 'Test Package', 'Package')
-			.then(done);
+			.then(function() { done(); });
 	});
 });
 
@@ -96,7 +96,7 @@ if (LTC.add_delete_dataset) {
 	describe('Delete any previous test Dataset(s)', function() {
 		it('Might delete a Dataset', function(done) {
 			LTH.deleteSpecificMemberByDataset('localhost:3000/api/listDatasets', 'localhost:3000/api/getDataset', 'localhost:3000/api/deleteDataset', LTC.saved_dataset_uuid, 'Dataset')
-				.then(done);
+				.then(function() { done(); });
 		});
 	});
 }
@@ -662,7 +662,7 @@ describe('Delete the test VM', function() {
 				LTH.confirmResultIsObject(res);
 				LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_stopped, function() {
 					LTH.deleteSpecificMemberByAlias('localhost:3000/api/listVMs', 'localhost:3000/api/getVM', 'localhost:3000/api/deleteVM', 'Test VM', 'VM')
-						.then(done);
+						.then(function() { done(); });
 				});
 			});
 	});
