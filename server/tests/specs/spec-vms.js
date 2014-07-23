@@ -308,90 +308,90 @@ describe('Add a VM', function() {
 	})
 });
 
-// The next several tests involve testing starting/stopping/rebooting the VM
-describe('Force stop a VM', function() {
-	it('Should force stop a VM', function(done) {
-		this.timeout(7000);
-		request.post('localhost:3000/api/runForceStopVM').send(LTC.saved_vm_data_object)
-			.end(function(res) {
-				LTH.confirmResultIsObject(res);
-				LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_stopped, done);
-			});
-	});
-});
+// // The next several tests involve testing starting/stopping/rebooting the VM
+// describe('Force stop a VM', function() {
+// 	it('Should force stop a VM', function(done) {
+// 		this.timeout(7000);
+// 		request.post('localhost:3000/api/runForceStopVM').send(LTC.saved_vm_data_object)
+// 			.end(function(res) {
+// 				LTH.confirmResultIsObject(res);
+// 				LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_stopped, done);
+// 			});
+// 	});
+// });
 
-// Log in as an admin
-describe('Log in to FiFo as admin', function() {
-	it('Should return a user object', function(done) {
-		request.get('localhost:3000/logout').send({}).end(function(res) {
-			request.post('localhost:3000/api/login').send({
-				"username": LTH.Config.testing.specAdminUname,
-				"password": LTH.Config.testing.specAdminPword
-			}).end(function(res) {
-				LTH.confirmResultIsObjectAndParse(res, 1);
-				done();
-			});
-		});
-	});
-});
+// // Log in as an admin
+// describe('Log in to FiFo as admin', function() {
+// 	it('Should return a user object', function(done) {
+// 		request.get('localhost:3000/logout').send({}).end(function(res) {
+// 			request.post('localhost:3000/api/login').send({
+// 				"username": LTH.Config.testing.specAdminUname,
+// 				"password": LTH.Config.testing.specAdminPword
+// 			}).end(function(res) {
+// 				LTH.confirmResultIsObjectAndParse(res, 1);
+// 				done();
+// 			});
+// 		});
+// 	});
+// });
 
-describe('Force reboot a VM', function() {
-	it('Should force reboot a VM', function(done) {
-		this.timeout(12000);
-		request.post('localhost:3000/api/runStartVM').send(LTC.saved_vm_data_object)
-			.end(function(res) {
-				LTH.confirmResultIsObject(res);
-				LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_running, function() {
-					request.post('localhost:3000/api/runForceRebootVM').send({
-						"uuid": LTC.saved_vm_uuid
-					}).end(function(res2) {
-						LTH.confirmResultIsObject(res2);
-						Q.delay(2000).then(function() {
-							LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_running, done);
-						})
-						// LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_shutting_down, function() {
-						// LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_running, done);
-						// }, 1);
-					});
-				});
-			});
-	});
-});
+// describe('Force reboot a VM', function() {
+// 	it('Should force reboot a VM', function(done) {
+// 		this.timeout(12000);
+// 		request.post('localhost:3000/api/runStartVM').send(LTC.saved_vm_data_object)
+// 			.end(function(res) {
+// 				LTH.confirmResultIsObject(res);
+// 				LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_running, function() {
+// 					request.post('localhost:3000/api/runForceRebootVM').send({
+// 						"uuid": LTC.saved_vm_uuid
+// 					}).end(function(res2) {
+// 						LTH.confirmResultIsObject(res2);
+// 						Q.delay(2000).then(function() {
+// 							LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_running, done);
+// 						})
+// 						// LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_shutting_down, function() {
+// 						// LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_running, done);
+// 						// }, 1);
+// 					});
+// 				});
+// 			});
+// 	});
+// });
 
-describe('Stop a VM', function() {
-	it('Should stop a VM', function(done) {
-		this.timeout(12000);
-		request.post('localhost:3000/api/runStopVM').send(LTC.saved_vm_data_object)
-			.end(function(res) {
-				LTH.confirmResultIsObject(res);
-				LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_stopped, done, 1000);
-			});
-	});
-});
+// describe('Stop a VM', function() {
+// 	it('Should stop a VM', function(done) {
+// 		this.timeout(12000);
+// 		request.post('localhost:3000/api/runStopVM').send(LTC.saved_vm_data_object)
+// 			.end(function(res) {
+// 				LTH.confirmResultIsObject(res);
+// 				LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_stopped, done, 1000);
+// 			});
+// 	});
+// });
 
-describe('Start a VM', function() {
-	it('Should start a VM', function(done) {
-		this.timeout(10000);
-		request.post('localhost:3000/api/runStartVM').send(LTC.saved_vm_data_object)
-			.end(function(res) {
-				LTH.confirmResultIsObject(res);
-				LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_running, done);
-			});
-	});
-});
+// describe('Start a VM', function() {
+// 	it('Should start a VM', function(done) {
+// 		this.timeout(10000);
+// 		request.post('localhost:3000/api/runStartVM').send(LTC.saved_vm_data_object)
+// 			.end(function(res) {
+// 				LTH.confirmResultIsObject(res);
+// 				LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_running, done);
+// 			});
+// 	});
+// });
 
-describe('Reboot a VM', function() {
-	it('Should reboot a VM', function(done) {
-		this.timeout(10000);
-		request.post('localhost:3000/api/runRebootVM').send(LTC.saved_vm_data_object)
-			.end(function(res) {
-				LTH.confirmResultIsObject(res);
-				LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_shutting_down, function() {
-					LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_running, done);
-				}, 10);
-			});
-	});
-});
+// describe('Reboot a VM', function() {
+// 	it('Should reboot a VM', function(done) {
+// 		this.timeout(10000);
+// 		request.post('localhost:3000/api/runRebootVM').send(LTC.saved_vm_data_object)
+// 			.end(function(res) {
+// 				LTH.confirmResultIsObject(res);
+// 				LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_shutting_down, function() {
+// 					LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_running, done);
+// 				}, 10);
+// 			});
+// 	});
+// });
 
 // The next several tests involve testing NIC manipulation on the VM
 describe('Get the VM\'s current details to check the NIC count', function() {
@@ -408,7 +408,7 @@ describe('Get the VM\'s current details to check the NIC count', function() {
 
 describe('Add a NIC to a VM', function() {
 	it('Should add a new NIC to a VM', function(done) {
-		this.timeout(7000);
+		this.timeout(14000);
 		request.post('localhost:3000/api/runForceStopVM').send(LTC.saved_vm_data_object)
 			.end(function(res) {
 				LTH.confirmResultIsObject(res);
@@ -516,68 +516,68 @@ describe('Delete the new snapshot', function() {
 	});
 });
 
-// The next several tests involve testing backups on the VM
-describe('Get the list of backups for a VM', function() {
-	it('Should return a list of VM backups', function(done) {
-		request.post('localhost:3000/api/listVMBackups').send(LTC.saved_vm_data_object)
-			.end(function(res) {
-				var resArray = LTH.confirmResultIsObjectAndParse(res);
-				LTC.backup_items_length = resArray.length;
-				expect(LTC.backup_items_length).to.be.eql(0);
-				done();
-			});
-	});
-});
+// // The next several tests involve testing backups on the VM
+// describe('Get the list of backups for a VM', function() {
+// 	it('Should return a list of VM backups', function(done) {
+// 		request.post('localhost:3000/api/listVMBackups').send(LTC.saved_vm_data_object)
+// 			.end(function(res) {
+// 				var resArray = LTH.confirmResultIsObjectAndParse(res);
+// 				LTC.backup_items_length = resArray.length;
+// 				expect(LTC.backup_items_length).to.be.eql(0);
+// 				done();
+// 			});
+// 	});
+// });
 
-describe('Create a new backup for a VM', function() {
-	it('Should create a new backup', function(done) {
-		this.timeout(7000);
-		request.post('localhost:3000/api/createVMBackup').send({
-			"uuid": LTC.saved_vm_uuid,
-			"comment": "New test VM backup"
-		}).end(function(res) {
-			var resArray = LTH.confirmResultIsObjectAndParse(res);
-			LTC.saved_backup_details = resArray;
-			LTH.waitForProperty('localhost:3000/api/listVMBackups', LTC.saved_vm_data_object, LTC.confirm_vm_backup_created, done);
-		});
-	});
-});
+// describe('Create a new backup for a VM', function() {
+// 	it('Should create a new backup', function(done) {
+// 		this.timeout(7000);
+// 		request.post('localhost:3000/api/createVMBackup').send({
+// 			"uuid": LTC.saved_vm_uuid,
+// 			"comment": "New test VM backup"
+// 		}).end(function(res) {
+// 			var resArray = LTH.confirmResultIsObjectAndParse(res);
+// 			LTC.saved_backup_details = resArray;
+// 			LTH.waitForProperty('localhost:3000/api/listVMBackups', LTC.saved_vm_data_object, LTC.confirm_vm_backup_created, done);
+// 		});
+// 	});
+// });
 
-describe('Get the new backup details', function() {
-	it('Should return a backup object', function(done) {
-		var this_vm_backup_data_object = {
-			"uuid": LTC.saved_vm_uuid,
-			"backup_uuid": LTC.saved_backup_uuid
-		};
-		LTH.waitForProperty('localhost:3000/api/getVMBackup', this_vm_backup_data_object, LTC.confirm_vm_backup_created_deep, done);
-	});
-});
+// describe('Get the new backup details', function() {
+// 	it('Should return a backup object', function(done) {
+// 		var this_vm_backup_data_object = {
+// 			"uuid": LTC.saved_vm_uuid,
+// 			"backup_uuid": LTC.saved_backup_uuid
+// 		};
+// 		LTH.waitForProperty('localhost:3000/api/getVMBackup', this_vm_backup_data_object, LTC.confirm_vm_backup_created_deep, done);
+// 	});
+// });
 
-describe('Rollback a VM to a backup', function() {
-	it('Should return a VM object', function(done) {
-		request.post('localhost:3000/api/rollbackVMBackup').send({
-			"uuid": LTC.saved_vm_uuid,
-			"backup_uuid": LTC.saved_backup_uuid
-		}).end(function(res) {
-			LTH.confirmResultIsObject(res);
-			expect(res.text).to.be.eql("OK");
-			done();
-		});
-	});
-});
+// describe('Rollback a VM to a backup', function() {
+// 	it('Should return a VM object', function(done) {
+// 		request.post('localhost:3000/api/rollbackVMBackup').send({
+// 			"uuid": LTC.saved_vm_uuid,
+// 			"backup_uuid": LTC.saved_backup_uuid
+// 		}).end(function(res) {
+// 			LTH.confirmResultIsObject(res);
+// 			expect(res.text).to.be.eql("OK");
+// 			done();
+// 		});
+// 	});
+// });
 
-describe('Delete the new backup', function() {
-	it('Should delete a backup', function(done) {
-		this.timeout(7000);
-		request.post('localhost:3000/api/deleteVMBackup').send({
-			"uuid": LTC.saved_vm_uuid,
-			"backup_uuid": LTC.saved_backup_uuid
-		}).end(function(res) {
-			LTH.confirmResultIsObject(res);
-			LTH.waitForProperty('localhost:3000/api/listVMBackups', LTC.saved_vm_data_object, LTC.confirm_vm_backup_deleted, done);
-		});
-	});
-});
+// describe('Delete the new backup', function() {
+// 	it('Should delete a backup', function(done) {
+// 		this.timeout(7000);
+// 		request.post('localhost:3000/api/deleteVMBackup').send({
+// 			"uuid": LTC.saved_vm_uuid,
+// 			"backup_uuid": LTC.saved_backup_uuid
+// 		}).end(function(res) {
+// 			LTH.confirmResultIsObject(res);
+// 			LTH.waitForProperty('localhost:3000/api/listVMBackups', LTC.saved_vm_data_object, LTC.confirm_vm_backup_deleted, done);
+// 		});
+// 	});
+// });
 
 // These next several tests are just to ensure we can set/delete a VM's metadata separately from its creation.
 describe('Get the VM\'s current details to check the metadata', function() {

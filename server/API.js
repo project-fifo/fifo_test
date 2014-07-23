@@ -27,10 +27,10 @@ module.exports.api = function(server, ApiVariables) {
 
   server.get('/', function(req, res) {
     if (req.session.user) {
-      res.render('app.ejs');
+      // res.render('app.ejs');
     } else {
       var normalLoginFn = function() {
-        res.render('login.ejs');
+        // res.render('login.ejs');
       };
       // console.log(req.query);
       if ('code' in req.query) {
@@ -39,6 +39,18 @@ module.exports.api = function(server, ApiVariables) {
         normalLoginFn();
       }
     }
+  });
+
+  // logout (GET)
+  // ------------
+  //
+  // Destroy the session and redirect back to login page.
+
+  server.get('/logout', function(req, res) {
+    fifo.logout();
+    req.session.destroy(function(err) {
+      res.redirect('/');
+    });
   });
 
   // newVM/create (POST)
