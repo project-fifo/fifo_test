@@ -1,0 +1,5 @@
+node_modules
+server/config/config.js
+.DS_Store
+dump.rdb
+winston-*.log
