@@ -78,10 +78,10 @@ var env = app.settings.env;
 //} else {
     // add timestamps in front of log messages
     // require('console-stamp')(console, '[HH:mm:ss.l]');
-    // express.logger.format('mydate', function() {
-    //     var df = require('console-stamp/node_modules/dateformat');
-    //     return df(new Date(), 'ddd, d mmm yyyy HH:MM:ss.l Z');
-    // });
+    connect.logger.format('mydate', function() {
+        var df = require('console-stamp/node_modules/dateformat');
+        return df(new Date(), 'ddd, d mmm yyyy HH:MM:ss.l Z');
+    });
 
     // Server Config
 
@@ -91,9 +91,9 @@ var env = app.settings.env;
 
     server.use(express.cookieParser());
 
-    // server.use(express.logger({
-    //     format: workerIdPrefix + ':remote-addr - :status [:mydate] :method :url - :response-time ms'
-    // }));
+    server.use(connect.logger({
+        format: workerIdPrefix + ':remote-addr - :status [:mydate] :method :url - :response-time ms'
+    }));
 
     server.use(express.session({
         secret: Config.session.secret,
