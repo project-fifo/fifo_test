@@ -163,37 +163,37 @@ module.exports.ltc = function (LTH) {
 			return (theCount == my.saved_dtrace_count);
 		},
 
-		// support functions for spec-groups.js
+		// support functions for spec-roles.js
 
-		confirm_group_created: function (theUuid)
+		confirm_role_created: function (theUuid)
 		{
 			var condition = (theUuid.length > 5);
 			if (condition) {
-				my.saved_user_group_uuid = theUuid;
-				my.saved_group_data_object = { "uuid": my.saved_user_group_uuid };
+				my.saved_user_role_uuid = theUuid;
+				my.saved_role_data_object = { "uuid": my.saved_user_role_uuid };
 			}
 			return condition;
 		},
 
-		confirm_group_permissions_added: function (resArray)
+		confirm_role_permissions_added: function (resArray)
 		{
 			var temp_count = resArray.length;
-			var condition = (temp_count > my.saved_group_perm_count);
+			var condition = (temp_count > my.saved_role_perm_count);
 			if (condition)
 				LTH.showCountMessage(temp_count, 'permission');
 			return condition;
 		},
 
-		confirm_group_permissions_restored: function (resArray)
+		confirm_role_permissions_restored: function (resArray)
 		{
 			var temp_count = resArray.length;
-			var condition = (temp_count == my.saved_group_perm_count);
+			var condition = (temp_count == my.saved_role_perm_count);
 			if (condition)
 				LTH.showCountMessage(temp_count, 'permission');
 			return condition;
 		},
 
-		confirm_group_metadata_deep_add: function (resArray)
+		confirm_role_metadata_deep_add: function (resArray)
 		{
 			var condition1 = ('metadata' in resArray)
 				&& ('lucera3' in resArray.metadata)
@@ -204,26 +204,26 @@ module.exports.ltc = function (LTH) {
 			if (condition1) {
 				var temp_count_metadata_items = LTH.objectSize(resArray.metadata.lucera3);
 					LTH.showCountMessage(temp_count_metadata_items, 'metadata item');
-				condition2 = (temp_count_metadata_items == my.count_group_metadata_items+1);
+				condition2 = (temp_count_metadata_items == my.count_role_metadata_items+1);
 				if (condition2)
 					LTH.showCountMessage(temp_count_metadata_items, 'metadata item');
 			}
 			return (condition1 && condition2);
 		},
 
-		confirm_group_metadata_deep_delete: function (resArray)
+		confirm_role_metadata_deep_delete: function (resArray)
 		{
 			var condition1 = ('metadata' in resArray)
 				&& ('lucera3' in resArray.metadata)
 				&& !('extra_data' in resArray.metadata.lucera3);
 			var temp_count_metadata_items = LTH.objectSize(resArray.metadata.lucera3);
-			var condition2 = (temp_count_metadata_items == my.count_group_metadata_items);
+			var condition2 = (temp_count_metadata_items == my.count_role_metadata_items);
 			if (condition2)
 				LTH.showCountMessage(temp_count_metadata_items, 'metadata item');
 			return (condition1 && condition2);
 		},
 
-		confirm_group_metadata_shallow_delete: function (resArray)
+		confirm_role_metadata_shallow_delete: function (resArray)
 		{
 			var condition = (!resArray.metadata.lucera3);
 			if (condition)
@@ -231,7 +231,7 @@ module.exports.ltc = function (LTH) {
 			return condition;
 		},
 
-		confirm_group_metadata_shallow_add: function (resArray)
+		confirm_role_metadata_shallow_add: function (resArray)
 		{
 			var condition1 = ('metadata' in resArray)
 				&& ('lucera3' in resArray.metadata)
@@ -247,9 +247,9 @@ module.exports.ltc = function (LTH) {
 			return (condition1 && condition2);
 		},
 
-		confirm_group_deleted: function (theCount)
+		confirm_role_deleted: function (theCount)
 		{
-			return (theCount == my.saved_group_count);
+			return (theCount == my.saved_role_count);
 		},
 
 		// support functions for spec-hypervisors.js
@@ -364,6 +364,7 @@ module.exports.ltc = function (LTH) {
 
 		confirm_iprange_metadata_deep_add: function (resArray)
 		{
+				console.log('!', resArray);
 			var condition1 = ('metadata' in resArray)
 				&& ('lucera3' in resArray.metadata)
 				&& ('extra_data' in resArray.metadata.lucera3)
@@ -699,21 +700,21 @@ module.exports.ltc = function (LTH) {
 			return condition;
 		},
 
-		confirm_user_group_added: function(resArray)
+		confirm_user_role_added: function(resArray)
 		{
-			var temp_group_count = resArray.length;
-			var condition = (temp_group_count === (my.saved_user_group_count + 1));
+			var temp_role_count = resArray.length;
+			var condition = (temp_role_count === (my.saved_user_role_count + 1));
 			if (condition)
-				LTH.showCountMessage(temp_group_count, 'user group');
+				LTH.showCountMessage(temp_role_count, 'user role');
 			return condition;
 		},
 
-		confirm_user_group_deleted: function(resArray)
+		confirm_user_role_deleted: function(resArray)
 		{
-			var temp_group_count = resArray.length;
-			var condition = (temp_group_count === my.saved_user_group_count);
+			var temp_role_count = resArray.length;
+			var condition = (temp_role_count === my.saved_user_role_count);
 			if (condition)
-				LTH.showCountMessage(temp_group_count, 'user group');
+				LTH.showCountMessage(temp_role_count, 'user role');
 			return condition;
 		},
 
