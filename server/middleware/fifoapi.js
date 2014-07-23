@@ -60,11 +60,11 @@ module.exports.getTokensInternal = function() {
 module.exports.signupUser = function(req, res, next) {
     var randPass = function(len) {
         var randLetter = function(letters) {
-            var min = 1,
-                max = letters.length,
-                rand = Math.floor(Math.random() * (max - min) + min);
-            return ((max <= 1) ? letters : letters[rand]);
-        },
+                var min = 1,
+                    max = letters.length,
+                    rand = Math.floor(Math.random() * (max - min) + min);
+                return ((max <= 1) ? letters : letters[rand]);
+            },
             letterSets = ['0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789'],
             password = "";
         for (var i = 0; i < len; i++)
@@ -189,18 +189,18 @@ module.exports.signupUser = function(req, res, next) {
 // Signup for an organization
 module.exports.signup = function(req, res, next) {
     var randPass = function(len) {
-        var randLetter = function(letters) {
-            var min = 1,
-                max = letters.length,
-                rand = Math.floor(Math.random() * (max - min) + min);
-            return ((max <= 1) ? letters : letters[rand]);
+            var randLetter = function(letters) {
+                    var min = 1,
+                        max = letters.length,
+                        rand = Math.floor(Math.random() * (max - min) + min);
+                    return ((max <= 1) ? letters : letters[rand]);
+                },
+                letterSets = ['0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789'],
+                password = "";
+            for (var i = 0; i < len; i++)
+                password += randLetter(letterSets[0]);
+            return password;
         },
-            letterSets = ['0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789'],
-            password = "";
-        for (var i = 0; i < len; i++)
-            password += randLetter(letterSets[0]);
-        return password;
-    },
         userPass = randPass(12);
 
     _which = 0;
@@ -962,17 +962,17 @@ var getDataAndRespondC = function(req, res, func, funcMeta) {
 };
 
 var protoListFunc = function(fifoItem, obj, token, allItems) {
-    // List all Items
-    return getEndpointData(function(obj) {
-        if (!allItems) {
-            // List all items, uuid only
-            return fifoItem.list(obj);
-        } else {
-            // List all items, all data
-            return fifoItem.listAll(obj);
-        }
-    }, token);
-},
+        // List all Items
+        return getEndpointData(function(obj) {
+            if (!allItems) {
+                // List all items, uuid only
+                return fifoItem.list(obj);
+            } else {
+                // List all items, all data
+                return fifoItem.listAll(obj);
+            }
+        }, token);
+    },
     protoListDetailFunc = function(fifoItem, e, obj, token) {
         return getEndpointData(function(obj) {
             // Get the specific item
@@ -1567,7 +1567,9 @@ module.exports.addUserRole = function(req, res, next) {
                 req.body.name = userData.metadata.lucera3.name.first;
                 req.body.email = userData.metadata.lucera3.email;
             }
-            next();
+            res.send(200, {
+                success: 'success'
+            });
         });
     }, function() {});
 };
@@ -1603,7 +1605,9 @@ module.exports.addUserKey = function(req, res, next) {
                 req.body.name = userData.metadata.lucera3.name.first;
                 req.body.email = userData.metadata.lucera3.email;
             }
-            next();
+            res.send(200, {
+                success: 'success'
+            });
         });
     }, function() {});
 };
@@ -1621,7 +1625,9 @@ module.exports.delUserKey = function(req, res, next) {
                 req.body.name = userData.metadata.lucera3.name.first;
                 req.body.email = userData.metadata.lucera3.email;
             }
-            next();
+            res.send(200, {
+                success: 'success'
+            });
         });
     }, function() {});
 };
@@ -2170,16 +2176,16 @@ module.exports.createVMbyObj = function(req, res, next) {
     token.then(function(obj) {
         // setup the functions to support the utility function below
         var orgFunc = function(uuid, token) {
-            var deferred = Q.defer();
-            token.then(function(obj) {
-                // console.log('getting organization name');
-                return Organization.get(uuid, obj);
-            })
-                .then(function(orgInfo) {
-                    deferred.resolve(orgInfo.name);
-                });
-            return deferred.promise;
-        },
+                var deferred = Q.defer();
+                token.then(function(obj) {
+                    // console.log('getting organization name');
+                    return Organization.get(uuid, obj);
+                })
+                    .then(function(orgInfo) {
+                        deferred.resolve(orgInfo.name);
+                    });
+                return deferred.promise;
+            },
             netFunc = function(coName, token) {
                 var deferred = Q.defer();
                 token.then(function(obj) {

@@ -20,12 +20,12 @@ LTC.setup({
 	"saved_org_uuid": '',
 	"saved_org_data_object": null,
 	"saved_org_data_object2": null,
-	"saved_user_group_uuid": '',
-	"saved_group_count": 0,
-	"saved_group_data_object": null,
+	"saved_user_role_uuid": '',
+	"saved_role_count": 0,
+	"saved_role_data_object": null,
 	"saved_user_org_uuid": '',
 	"saved_user_perm_count": 0,
-	"saved_user_group_count": 0,
+	"saved_user_role_count": 0,
 	"saved_user_org_count": 0,
 	"saved_user_key_count": 0,
 	"count_user_metadata_items": 0,
@@ -80,9 +80,9 @@ describe('Log in to FiFo as admin', function() {
 // });
 
 // Let's find and erase any info from our previous tests...
-describe('Delete any previous test Group(s)', function() {
-	it('Might delete a group', function(done) {
-		LTH.deleteSpecificMember('localhost:3000/api/listGroups', 'localhost:3000/api/getGroup', 'localhost:3000/api/deleteGroup', ['Test Group', 'Test Group 2'], 'Group')
+describe('Delete any previous test Role(s)', function() {
+	it('Might delete a role', function(done) {
+		LTH.deleteSpecificMember('localhost:3000/api/listRoles', 'localhost:3000/api/getRole', 'localhost:3000/api/deleteRole', ['Test Role', 'Test Role 2'], 'Role')
 			.then(function() { done(); });
 	});
 });
@@ -102,12 +102,12 @@ describe('Delete any previous test User(s)', function() {
 });
 
 // Now that we've cleaned up any remnants from old tests, let's grab the numbers of items to confirm this is the same at the end of our tests
-describe('List All Groups', function() {
+describe('List All Roles', function() {
 	this.timeout(4000);
-	it('Should list all the groups', function(done) {
-		LTH.listAllMembers('localhost:3000/api/listGroups', 'localhost:3000/api/getGroup', 'Group')
+	it('Should list all the roles', function(done) {
+		LTH.listAllMembers('localhost:3000/api/listRoles', 'localhost:3000/api/getRole', 'Role')
 			.then(function(the_count) {
-				LTC.saved_group_count = the_count;
+				LTC.saved_role_count = the_count;
 				done();
 			});
 	});
@@ -203,15 +203,15 @@ describe('List All Users', function() {
 // 	});
 // });
 
-// Here we're creating a temporary group for some later testing.
-describe('Create a New Group', function() {
-	it('Should create a group', function(done) {
-		request.post('localhost:3000/api/createGroup').send({
-			"groupName": 'Test Group 2',
-			"description": 'My second group is even more fun!'
+// Here we're creating a temporary role for some later testing.
+describe('Create a New Role', function() {
+	it('Should create a role', function(done) {
+		request.post('localhost:3000/api/createRole').send({
+			"roleName": 'Test Role 2',
+			"description": 'My second role is even more fun!'
 		}).end(function(res) {
 			LTH.confirmResultIsObject(res);
-			LTH.waitForListItem('localhost:3000/api/listGroups', 'localhost:3000/api/getGroup', 'Test Group 2', 'Saving group uuid: ', LTC.confirm_group_created, done);
+			LTH.waitForListItem('localhost:3000/api/listRoles', 'localhost:3000/api/getRole', 'Test Role 2', 'Saving role uuid: ', LTC.confirm_role_created, done);
 		});
 	});
 });
@@ -316,41 +316,41 @@ describe('Revoke permissions for a user', function() {
 	});
 });
 
-// The next several tests below involve user group testing.
-describe('List the user\'s groups', function() {
-	it('Should list user group membership', function(done) {
-		request.post('localhost:3000/api/listUserGroups').send(LTC.saved_user_data_object)
+// The next several tests below involve user role testing.
+describe('List the user\'s roles', function() {
+	it('Should list user role membership', function(done) {
+		request.post('localhost:3000/api/listUserRoles').send(LTC.saved_user_data_object)
 			.end(function(res) {
 				var resArray = LTH.confirmResultIsObjectAndParse(res);
-				LTC.saved_user_group_count = resArray.length;
-				LTH.showCountMessage(LTC.saved_user_group_count, 'user group');
+				LTC.saved_user_role_count = resArray.length;
+				LTH.showCountMessage(LTC.saved_user_role_count, 'user role');
 				done();
 			});
 	});
 });
 
-describe('Add a group for a user', function() {
-	it('Should add a group', function(done) {
+describe('Add a role for a user', function() {
+	it('Should add a role', function(done) {
 		Q.delay(250).then(function() {
-			request.post('localhost:3000/api/addUserGroup').send({
+			request.post('localhost:3000/api/addUserRole').send({
 				"uuid": LTC.saved_user_uuid,
-				"group_uuid": LTC.saved_user_group_uuid
+				"role_uuid": LTC.saved_user_role_uuid
 			}).end(function(res) {
 				LTH.confirmResultIsObject(res);
-				LTH.waitForProperty('localhost:3000/api/listUserGroups', LTC.saved_user_data_object, LTC.confirm_user_group_added, done);
+				LTH.waitForProperty('localhost:3000/api/listUserRoles', LTC.saved_user_data_object, LTC.confirm_user_role_added, done);
 			});
 		});
 	});
 });
 
-describe('Delete a group for a user', function() {
-	it('Should delete a group', function(done) {
-		request.post('localhost:3000/api/delUserGroup').send({
+describe('Delete a role for a user', function() {
+	it('Should delete a role', function(done) {
+		request.post('localhost:3000/api/delUserRole').send({
 			"uuid": LTC.saved_user_uuid,
-			"group_uuid": LTC.saved_user_group_uuid
+			"role_uuid": LTC.saved_user_role_uuid
 		}).end(function(res) {
 			LTH.confirmResultIsObject(res);
-			LTH.waitForProperty('localhost:3000/api/listUserGroups', LTC.saved_user_data_object, LTC.confirm_user_group_deleted, done);
+			LTH.waitForProperty('localhost:3000/api/listUserRoles', LTC.saved_user_data_object, LTC.confirm_user_role_deleted, done);
 		});
 	});
 });
@@ -566,12 +566,12 @@ describe('Delete a User\'s metadata, deep test', function() {
 // });
 
 // And, delete the test items
-describe('Delete the test Group', function() {
-	it('Should delete the test group', function(done) {
-		request.post('localhost:3000/api/deleteGroup').send(LTC.saved_group_data_object)
+describe('Delete the test Role', function() {
+	it('Should delete the test role', function(done) {
+		request.post('localhost:3000/api/deleteRole').send(LTC.saved_role_data_object)
 			.end(function(res) {
 				LTH.confirmResultIsObject(res);
-				LTH.waitForListCount('localhost:3000/api/listGroups', 'localhost:3000/api/getGroup', 'Group', LTC.confirm_group_deleted, done);
+				LTH.waitForListCount('localhost:3000/api/listRoles', 'localhost:3000/api/getRole', 'Role', LTC.confirm_role_deleted, done);
 			});
 	});
 });
