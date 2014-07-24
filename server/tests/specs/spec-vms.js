@@ -65,9 +65,13 @@ describe('Log in to FiFo as admin', function() {
 // Let's find and erase any info from our previous tests...
 describe('Delete any previous test VM(s)', function() {
 	it('Might delete a VM', function(done) {
-		this.timeout(8000);
+		this.timeout(13000);
 		LTH.deleteSpecificMemberByAlias('localhost:3000/api/listVMs', 'localhost:3000/api/getVM', 'localhost:3000/api/deleteVM', 'Test VM', 'VM')
-			.then(function() { done(); });
+			.then(function() {
+				Q.delay(6000).then(function() {
+					done();
+				});
+			});
 	});
 });
 
@@ -406,52 +410,52 @@ describe('Get the VM\'s current details to check the NIC count', function() {
 	});
 });
 
-describe('Add a NIC to a VM', function() {
-	it('Should add a new NIC to a VM', function(done) {
-		this.timeout(14000);
-		request.post('localhost:3000/api/runForceStopVM').send(LTC.saved_vm_data_object)
-			.end(function(res) {
-				LTH.confirmResultIsObject(res);
-				LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_stopped, function() {
-					request.post('localhost:3000/api/addVMNic').send({
-						"uuid": LTC.saved_vm_uuid,
-						"nic_uuid": LTC.saved_network2_uuid
-					}).end(function(res2) {
-						LTH.confirmResultIsObject(res2);
-						LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_network_counts, function() {
-							LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_nic_gateway_and_save, done);
-						});
-					});
-				});
-			});
-	});
-});
+// describe('Add a NIC to a VM', function() {
+// 	it('Should add a new NIC to a VM', function(done) {
+// 		this.timeout(14000);
+// 		request.post('localhost:3000/api/runForceStopVM').send(LTC.saved_vm_data_object)
+// 			.end(function(res) {
+// 				LTH.confirmResultIsObject(res);
+// 				LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_stopped, function() {
+// 					request.post('localhost:3000/api/addVMNic').send({
+// 						"uuid": LTC.saved_vm_uuid,
+// 						"nic_uuid": LTC.saved_network2_uuid
+// 					}).end(function(res2) {
+// 						LTH.confirmResultIsObject(res2);
+// 						LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_network_counts, function() {
+// 							LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_nic_gateway_and_save, done);
+// 						});
+// 					});
+// 				});
+// 			});
+// 	});
+// });
 
-describe('Make a NIC the primary for a VM', function() {
-	it('Should make a NIC primary for a VM', function(done) {
-		this.timeout(7000);
-		request.post('localhost:3000/api/makeVMPrimaryNic').send({
-			"uuid": LTC.saved_vm_uuid,
-			"nic_mac": LTC.saved_vm_nic_mac_addr
-		}).end(function(res) {
-			LTH.confirmResultIsObject(res);
-			LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_nic_primary_status, done);
-		});
-	});
-});
+// describe('Make a NIC the primary for a VM', function() {
+// 	it('Should make a NIC primary for a VM', function(done) {
+// 		this.timeout(7000);
+// 		request.post('localhost:3000/api/makeVMPrimaryNic').send({
+// 			"uuid": LTC.saved_vm_uuid,
+// 			"nic_mac": LTC.saved_vm_nic_mac_addr
+// 		}).end(function(res) {
+// 			LTH.confirmResultIsObject(res);
+// 			LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_nic_primary_status, done);
+// 		});
+// 	});
+// });
 
-describe('Delete a NIC from a VM', function() {
-	it('Should remove the NIC from the VM', function(done) {
-		this.timeout(7000);
-		request.post('localhost:3000/api/deleteVMNic').send({
-			"uuid": LTC.saved_vm_uuid,
-			"nic_mac": LTC.saved_vm_nic_mac_addr
-		}).end(function(res) {
-			LTH.confirmResultIsObject(res);
-			LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_nic_count_restored, done);
-		});
-	});
-});
+// describe('Delete a NIC from a VM', function() {
+// 	it('Should remove the NIC from the VM', function(done) {
+// 		this.timeout(7000);
+// 		request.post('localhost:3000/api/deleteVMNic').send({
+// 			"uuid": LTC.saved_vm_uuid,
+// 			"nic_mac": LTC.saved_vm_nic_mac_addr
+// 		}).end(function(res) {
+// 			LTH.confirmResultIsObject(res);
+// 			LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_nic_count_restored, done);
+// 		});
+// 	});
+// });
 
 // The next several tests involve testing snapshots on the VM
 describe('Get the list of snapshots for a VM', function() {
@@ -492,13 +496,16 @@ describe('Get the new snapshot details', function() {
 
 describe('Rollback a VM to a snapshot', function() {
 	it('Should return a VM object', function(done) {
-		request.post('localhost:3000/api/rollbackVMSnapshot').send({
+		var this_vm_snapshot_data_object = {
 			"uuid": LTC.saved_vm_uuid,
 			"snapshot_uuid": LTC.saved_snapshot_uuid
-		}).end(function(res) {
-			LTH.confirmResultIsObject(res);
-			expect(res.text).to.be.eql("OK");
-			done();
+		};
+		request.post('localhost:3000/api/rollbackVMSnapshot').send(
+			this_vm_snapshot_data_object
+		).end(function(res) {
+			var resArray = LTH.confirmResultIsObjectAndParse(res);
+			expect(resArray[0]).to.be.eql("OK");
+			LTH.waitForProperty('localhost:3000/api/getVMSnapshot', this_vm_snapshot_data_object, LTC.confirm_vm_snapshot_rolled_back, done);
 		});
 	});
 });
@@ -621,6 +628,7 @@ describe('Set a VM\'s metadata, deep test', function() {
 
 describe('Delete a VM\'s metadata, deep test', function() {
 	it('Should delete the VM metadata', function(done) {
+		this.timeout(4000);
 		request.post('localhost:3000/api/metadataVMDel').send({
 			"uuid": LTC.saved_vm_uuid,
 			"meta_path": ["lucera3", "extra_data"]
@@ -657,14 +665,18 @@ describe('Set a VM\'s metadata, shallow test', function() {
 describe('Delete the test VM', function() {
 	it('Should delete a VM', function(done) {
 		this.timeout(13000);
-		request.post('localhost:3000/api/runForceStopVM').send(LTC.saved_vm_data_object)
-			.end(function(res) {
-				LTH.confirmResultIsObject(res);
-				LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_stopped, function() {
+		// request.post('localhost:3000/api/runForceStopVM').send(LTC.saved_vm_data_object)
+		// 	.end(function(res) {
+		// 		LTH.confirmResultIsObject(res);
+		// 		LTH.waitForProperty('localhost:3000/api/getVM', LTC.saved_vm_data_object, LTC.confirm_vm_stopped, function() {
 					LTH.deleteSpecificMemberByAlias('localhost:3000/api/listVMs', 'localhost:3000/api/getVM', 'localhost:3000/api/deleteVM', 'Test VM', 'VM')
-						.then(function() { done(); });
-				});
-			});
+						.then(function() {
+							Q.delay(6000).then(function() {
+								done();
+							});
+						});
+		// 		});
+		// 	});
 	});
 });
 

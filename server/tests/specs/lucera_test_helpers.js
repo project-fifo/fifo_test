@@ -264,7 +264,7 @@ module.exports.lth = function() {
 							else if (matchType == 'object') {
 								var matchText = match.match,
 									startsWith = 'startswith' in match,
-									endsWith = 'endswith' in match
+									endsWith = 'endswith' in match,
 									regex = new RegExp((startsWith ? '^' : '') + matchText + (endsWith ? '$' : ''));
 								if (matchText.length > 1)
 									matchMade = regex.test(theName);
@@ -364,19 +364,29 @@ module.exports.lth = function() {
 						else if (matchType == 'object') {
 							var matchText = match.match,
 								startsWith = 'startswith' in match,
-								endsWith = 'endswith' in match
+								endsWith = 'endswith' in match,
 								regex = new RegExp((startsWith ? '^' : '') + matchText + (endsWith ? '$' : ''));
 							if (matchText.length > 1)
 								matchMade = regex.test(theName);
 						}
 						if (matchMade) {
+							var vm_data_object = {
+								'uuid': theUuid
+							};
 							console.log('Deleting the ' + term + ' named: ' + theName);
-							countDeleted++;
-							request.post(url3).send({
-								"uuid": theUuid
-							}).end(function(res3) {
-								my.confirmResultIsObject(res3);
-								// deferred.resolve();
+							request.post('localhost:3000/api/runForceStopVM').send(
+								vm_data_object
+							).end(function(res) {
+								my.confirmResultIsObject(res);
+								my.waitForProperty('localhost:3000/api/getVM', vm_data_object, LTC.confirm_vm_not_running, function() {
+									countDeleted++;
+									request.post(url3).send(
+										vm_data_object
+									).end(function(res3) {
+										my.confirmResultIsObject(res3);
+										// deferred.resolve();
+									});
+								});
 							});
 						}
 						if (iAsync >= theCount)
@@ -525,9 +535,9 @@ module.exports.lth = function() {
 		convertEmailArguments: function(which) {
 			// console.log(which, LTC.test_mailMatrix[which]);
 			var dataStruct = {
-				emailName: which,
-				email: LTC.test_email
-			},
+					emailName: which,
+					email: LTC.test_email
+				},
 				emailVars = LTC.test_mailMatrix[which];
 			for (var i = 0; i < emailVars.length; i++) {
 				var theVar = emailVars[i];

@@ -853,6 +853,13 @@ module.exports.ltc = function (LTH) {
 			return condition;
 		},
 
+		confirm_vm_not_running: function (resArray)
+		{
+			var condition = ('state' in resArray)
+			 	&& (resArray['state'] !== "running");
+			return condition;
+		},
+
 		confirm_vm_stopped_or_running: function (resArray)
 		{
 			var condition = (my.confirm_vm_running(resArray) || my.confirm_vm_stopped(resArray));
@@ -910,6 +917,12 @@ module.exports.ltc = function (LTH) {
 		confirm_vm_snapshot_created_deep: function (resArray)
 		{
 			var condition = (JSON.stringify(my.saved_snapshot_details) === JSON.stringify(resArray));
+			return condition;
+		},
+
+		confirm_vm_snapshot_rolled_back: function (resArray)
+		{
+			var condition = (resArray.state === 'completed');
 			return condition;
 		},
 
