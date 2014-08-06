@@ -95,7 +95,7 @@ module.exports.lth = function() {
 						"uuid": resUuid
 					}).end(function(res2) {
 						var resArray = my.confirmResultIsObjectAndParse(res2);
-						console.log(term + ' ' + (++iAsync) + ': ' + resArray.name + ' / ' + resArray.dataset);
+						console.log(term + ' ' + (++iAsync) + ': ' + resArray.name + ' / ' + resArray.uuid);
 						if (iAsync >= resText.length)
 							deferred.resolve(savedCount);
 					})
@@ -310,7 +310,7 @@ module.exports.lth = function() {
 					}).end(function(res2) {
 						var resArray = my.confirmResultIsObjectAndParse(res2);
 						var theName = resArray.name;
-						var theUuid = resArray.dataset;
+						var theUuid = resArray.uuid;
 						console.log(term + ' ' + (++iAsync) + ': ' + theName + ' / ' + theUuid);
 						if (match == theUuid) {
 							console.log('Deleting the ' + term + ' named: ' + theName);

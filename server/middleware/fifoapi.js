@@ -839,7 +839,7 @@ var getEndpointDataWithChildren = function(type, funcList, funcChild, token, whi
                             var dfdChild = funcChild(data[i], obj, token);
                             dfdCache.push(dfdChild);
                             dfdChild.then(function(moreData) {
-                                var tUuid = moreData.uuid ? moreData.uuid : moreData.dataset;
+                                var tUuid = moreData.uuid;
                                 moreData['dc'] = which;
                                 responsePacked[type].ldata[tUuid] = moreData;
                                 // console.log('moreData!', moreData);
@@ -876,7 +876,7 @@ var getEndpointDataWithChildren = function(type, funcList, funcChild, token, whi
                         actualListData = testData;
                     } else {
                         for (var key in testData) {
-                            var keyUuid = testData[key].uuid ? testData[key].uuid : testData[key].dataset;
+                            var keyUuid = testData[key].uuid;
                             keyList.push(keyUuid);
                             var newData = testData[key];
                             newData['dc'] = which;
@@ -2275,7 +2275,7 @@ module.exports.createVMbyObj = function(req, res, next) {
                             }
                         }
                         if (itemFound)
-                            deferred.resolve(resultDatasets[versionTrack.join('.')].dataset);
+                            deferred.resolve(resultDatasets[versionTrack.join('.')].uuid);
                         else
                             deferred.reject();
                     });
@@ -2845,7 +2845,7 @@ module.exports.createDataset = function(req, res) {
         };
         // Set Metadata
         token.then(function(obj) {
-            Dataset.metadataSet(data.dataset, "lucera3", meta, obj);
+            Dataset.metadataSet(data.uuid, "lucera3", meta, obj);
         });
         return data;
     });

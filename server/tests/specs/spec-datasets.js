@@ -11,6 +11,7 @@ var expect = require('expect.js'),
 	LTC = require('./lucera_test_conditionals.js').ltc(LTH);
 
 // let's setup some vars for the conditionals to pass around
+// The dataset used for testing is: qemu-1.1.2
 LTC.setup({
 	"saved_dataset_count": 0,
 	"saved_dataset_uuid": '75559714-6bd0-11e2-aa72-fb522708e25d',
